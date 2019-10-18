@@ -20,3 +20,63 @@
 .App-link {
   color: #09d3ac;
 }
+
+.graph {
+  display: flex;
+  margin: 5% auto;
+  max-width: 800px;
+}
+
+.graph g {
+  margin: 0 auto;
+}
+
+svg {
+  border: 1px solid #ccc;
+}
+
+text {
+  font-family: 'Avenir', sans-serif;
+}
+
+.axis .domain {
+  stroke: #bbb;
+}
+
+.x .tick line {
+  stroke: white;
+}
+
+.axis-scatter .tick line {
+  stroke: #bbb;
+  stroke-width: 0.5;
+  stroke-dasharray: 4, 2;
+}
+
+.line-axis .tick line {
+  stroke: #bbb;
+  stroke-width: 0.5;
+  stroke-dasharray: 4, 2;
+}
+
+.axis .tick line {
+  stroke: #bbb;
+  stroke-width: 0.5;
+  stroke-dasharray: 4, 2;
+}
+
+.axes-labels text {
+  font-size: 0.6em;
+  fill: #444;
+}
+
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  margin: 0.5em;
+  max-width: 33.33%;
+}
