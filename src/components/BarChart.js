@@ -11,20 +11,20 @@ class BarChart extends Component {
     const width = 500 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
-    // X-AXIS Scales
-    const xMax = Math.max(...pigPopulationArr);
-
-    const xScale = d3
-      .scaleLinear()
-      .domain([0, xMax])
-      .range([0, width]);
-
     // Y-AXIS Scales
+    const yMax = Math.max(...pigPopulationArr);
+
     const yScale = d3
+      .scaleLinear()
+      .domain([0, yMax])
+      .range([height, 0]);
+
+    // X-AXIS Scales
+    const xScale = d3
       .scaleBand()
       .domain(this.props.data.map(d => d.island))
-      .rangeRound([0, height])
-      .paddingInner(0.25);
+      .range([0, width])
+      .paddingInner(0.4);
 
     // Draw base
     const svg = d3
@@ -44,10 +44,28 @@ class BarChart extends Component {
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('y', d => yScale(d.island))
-      .attr('width', d => xScale(d.pigPopulation))
-      .attr('height', yScale.bandwidth())
+      .attr('x', s => xScale(s.island))
+      .attr('y', s => yScale(s.pigPopulation))
+      .attr('height', s => height - yScale(s.pigPopulation))
+      .attr('width', xScale.bandwidth())
+
       .style('fill', 'dodgerblue');
+
+    // Draw labels
+    svg
+      .append('text')
+      .attr('x', '-40%')
+      .attr('y', '-10%')
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .text('Pig population');
+
+    svg
+      .append('text')
+      .attr('x', '33%')
+      .attr('y', '83%')
+      .attr('text-anchor', 'middle')
+      .text('Hawaiian islands');
 
     // Draw header
     const header = svg
@@ -56,7 +74,7 @@ class BarChart extends Component {
       .attr('transform', `translate(0,${-margin.top * 0.6})`)
       .append('text');
 
-    header.append('tspan').text('Total revenue by genre in $US');
+    header.append('tspan').text('Hawaiian Pig Visualization');
 
     header
       .append('tspan')
@@ -64,13 +82,10 @@ class BarChart extends Component {
       .attr('dy', '1.5em')
       .style('font-size', '0.8em')
       .style('fill', '#555')
-      .text('Films w/ budget and revenue figures, 2000-2009');
+      .text('Hawaiian Pig Visualization 2000-2005');
 
-    // Draw x axis.
-    const xAxis = d3
-      .axisTop(xScale)
-      .tickSizeInner(-height)
-      .tickSizeOuter(0);
+    // // Draw x axis.
+    const xAxis = d3.axisBottom(xScale).tickSize(height, 0, 0);
 
     const xAxisDraw = svg
       .append('g')
@@ -78,7 +93,7 @@ class BarChart extends Component {
       .call(xAxis);
 
     // Draw y axis.
-    const yAxis = d3.axisLeft(yScale).tickSize(0);
+    const yAxis = d3.axisLeft(yScale).tickSize(-width, 0, 0);
 
     const yAxisDraw = svg
       .append('g')
