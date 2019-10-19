@@ -80,3 +80,14 @@ text {
   margin: 0.5em;
   max-width: 33.33%;
 }
+
+.playBtn {
+  position: absolute;
+  top: 0;
+  right: 50%;
+  display: block;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: darkorange;
+  border-radius: 5px;
+}

@@ -1,8 +1,29 @@
 import React, { Component } from 'react';
+import { withFauxDOM } from 'react-faux-dom';
 import * as d3 from 'd3';
 
-class BarChart extends Component {
+class Chart extends Component {
+  constructor(props) {
+    super(props);
+    this.renderD3 = this.renderD3.bind(this);
+    this.updateD3 = this.updateD3.bind(this);
+  }
+
   componentDidMount() {
+    this.renderD3();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //do not compare props.chart as it gets updated in updateD3()
+    if (this.props.data !== prevProps.data) {
+      this.updateD3();
+    }
+  }
+
+  renderD3() {
+    // This will create a faux div and store its virtual DOM
+    const faux = this.props.connectFauxDOM('div', 'chart');
+
     // Utils and helpers
     const pigPopulationArr = this.props.data.map(i => i.pigPopulation);
 
@@ -28,7 +49,7 @@ class BarChart extends Component {
 
     // Draw base
     const svg = d3
-      .select(this.refs.anchor)
+      .select(faux)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -48,7 +69,6 @@ class BarChart extends Component {
       .attr('y', s => yScale(s.pigPopulation))
       .attr('height', s => height - yScale(s.pigPopulation))
       .attr('width', xScale.bandwidth())
-
       .style('fill', 'dodgerblue');
 
     // Draw labels
@@ -103,13 +123,63 @@ class BarChart extends Component {
     yAxisDraw.selectAll('text').attr('dx', '-0.6em');
   }
 
+  updateD3() {
+    // Utils and helpers
+    const pigPopulationArr = this.props.data.map(i => i.pigPopulation);
+
+    // Margin convention
+    const margin = { top: 80, right: 80, bottom: 40, left: 80 };
+    const width = 500 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    // Y-AXIS Scales
+    const yMax = Math.max(...pigPopulationArr);
+
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, yMax])
+      .range([height, 0]);
+
+    // X-AXIS Scales
+    const xScale = d3
+      .scaleBand()
+      .domain(this.props.data.map(d => d.island))
+      .range([0, width])
+      .paddingInner(0.4);
+
+    // This will create a faux div and store its virtual DOM
+    const faux = this.props.connectFauxDOM('div', 'chart');
+
+    const svg = d3
+      .select(faux)
+      .select('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+    // rejoin data
+    const rect = svg
+      .attr('class', 'bars')
+      .selectAll('.bar')
+      .data(this.props.data)
+      .enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', s => xScale(s.island))
+      .attr('y', s => yScale(s.pigPopulation))
+      .attr('height', s => height - yScale(s.pigPopulation))
+      .attr('width', xScale.bandwidth())
+      .style('fill', 'dodgerblue');
+
+    this.props.animateFauxDOM(2000);
+  }
+
   render() {
-    return (
-      <div className="graph">
-        <g ref="anchor" />
-      </div>
-    );
+    return <div>{this.props.chart}</div>;
   }
 }
 
-export default BarChart;
+const FauxChart = withFauxDOM(Chart);
+
+export default FauxChart;

@@ -1,44 +1,43 @@
 import React, { Component } from 'react';
-import BarChart from './BarChart';
+import Chart from './Chart';
 
 class BarChartWrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      minYear: null,
-      maxYear: null,
-      currentYear: null,
-      currentData: [],
-    };
+    const yearsArr = props.data.map(i => i.year);
 
-    this.setCurrentDataSet.bind(this);
-  }
-
-  // Set max and min and first counted year of dataset's years
-  setCurrentDataSet() {
-    const yearsArr = this.props.data.map(i => i.year);
-
-    const currentYearDataSet = this.props.data.filter(
+    const currentYearDataSet = props.data.filter(
       i => i.year === Math.min(...yearsArr),
     );
 
-    this.setState({
-      ...this.state,
+    this.state = {
       minYear: Math.min(...yearsArr),
       maxYear: Math.max(...yearsArr),
       currentYear: Math.min(...yearsArr),
       currentData: currentYearDataSet,
-    });
+    };
+
+    this.startTimeTravel = this.startTimeTravel.bind(this);
   }
 
-  componentDidMount() {
-    this.setCurrentDataSet();
+  startTimeTravel() {
+    this.setState({
+      currentYear: this.state.currentYear + 1,
+      currentData: this.props.data.filter(i => i.year === this.state.currentYear),
+    });
   }
 
   render() {
     if (this.state.currentData.length) {
-      return <BarChart data={this.state.currentData} />;
+      return (
+        <div>
+          <button className="playBtn" onClick={this.startTimeTravel}>
+            START
+          </button>
+          <Chart data={this.state.currentData} />
+        </div>
+      );
     }
     return null;
   }
