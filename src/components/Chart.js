@@ -159,7 +159,7 @@ class Chart extends Component {
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // rejoin data
-    const rect = svg
+    svg
       .attr('class', 'bars')
       .selectAll('.bar')
       .data(this.props.data)
