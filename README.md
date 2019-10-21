@@ -1,68 +1,134 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Hawaiian Pig Visualization Assignment
 
-## Available Scripts
+**Objective:** Using [React](https://reactjs.org/), create an animated bar chart
+that shows the data over time.
 
-In the project directory, you can run:
+In the project directory, you'll find
+[`wild-pig-data.json`](src/wild-pig-data.json). This file contains imaginary
+data about wild pig populations on the various Hawaiian islands recorded over
+several years. Your task is to take this data and use React to create an
+animated bar chart. The chart should show pig population across islands, with
+each separate year of data being shown as a separate frame of the animation.
 
-### `yarn start`
+The chart should have these features:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* [ ] Animation that steps through the data, displaying each year for 2 seconds
+      before proceeding to the next year.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+* [ ] A progress bar that shows the currently displayed year's relationship to
+      the other years in the dataset.
 
-### `yarn test`
+* [ ] A play/pause button which enables and disables the animation, pausing on
+      whichever year is currently being shown
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* [ ] Year and play/paused state are persisted as query parameters in the URL.
+      For example, `http://localhost:3000/?paused=true&year=2002` should load
+      the page with the animation already paused and the year set to 2002
 
-### `yarn build`
+Don't hesitate to ask questions. You are allowed (expected?) to take
+implementation shortcuts for time. After all, this is how real software projects
+go. Simply document them, so we can discuss them with you!
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Good luck!
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Design
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+We've provided a [very rough wireframe](wireframe.png) in the project's root
+directory. This is intentionally vague to provide you with guidelines but allow
+you some flexibility to design the UI as you see fit.
 
-### `yarn eject`
+The app should follow
+[Google's Material Design guidelines](https://material.google.com/) to the best
+of your ability. You're can use a component library such as
+[Material UI](https://github.com/mui-org/material-ui) to help with this.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Development
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+We've provided a skeleton app that was bootstrapped with
+[Create React App](https://github.com/facebookincubator/create-react-app). We
+hope this will help reduce boilerplate but you are welcome to start fresh and
+use different technology, such as TypeScript.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To get started, install with the project's dependencies with `yarn install` or
+`npm install`. Then run the app in development mode with `yarn start` or `npm start`. You can now open [http://localhost:3000](http://localhost:3000) to view
+it in the browser. The page will automatically reload if you make edits.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Create React App
 
-## Learn More
+Create React App is designed to unobtrusively remove build configuration so you
+can focus on code. Below are a few key pieces of information about the build
+configuration that might be helpful if you haven't worked with Create React App
+before.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+You can find the full version of the Create React App guide
+[here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Folder Structure
 
-### Code Splitting
+Your project should look like this:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```
+homework-ui/
+  node_modules/
+  public/
+    index.html
+    favicon.ico
+  src/
+    App.css
+    App.js
+    index.css
+    index.js
+  package.json
+  README.md
+  wireframe.png
+  yarn.lock
+```
 
-### Analyzing the Bundle Size
+For the project to build, **these files must exist with exact filenames**:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+* `public/index.html` is the page template;
+* `src/index.js` is the JavaScript entry point.
 
-### Making a Progressive Web App
+You can delete or rename the other files.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+You may create subdirectories inside `src`. For faster rebuilds, only files
+inside `src` are processed by Webpack.<br> You need to **put any JS and CSS
+files inside `src`**, otherwise Webpack won’t see them.
 
-### Advanced Configuration
+### Supported Language Features and Polyfills
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+This project supports a superset of the latest JavaScript standard.<br> In
+addition to [ES6](https://github.com/lukehoban/es6features) syntax features, it
+also supports:
 
-### Deployment
+* [Exponentiation Operator](https://github.com/rwaldron/exponentiation-operator)
+  (ES2016).
+* [Async/await](https://github.com/tc39/ecmascript-asyncawait) (ES2017).
+* [Object Rest/Spread Properties](https://github.com/sebmarkbage/ecmascript-rest-spread)
+  (stage 3 proposal).
+* [Dynamic import()](https://github.com/tc39/proposal-dynamic-import) (stage 3
+  proposal)
+* [Class Fields and Static Properties](https://github.com/tc39/proposal-class-public-fields)
+  (part of stage 3 proposal).
+* [JSX](https://facebook.github.io/react/docs/introducing-jsx.html) and
+  [Flow](https://flowtype.org/) syntax.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Note that **the project only includes a few ES6
+[polyfills](https://en.wikipedia.org/wiki/Polyfill)**:
 
-### `yarn build` fails to minify
+* [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  via [`object-assign`](https://github.com/sindresorhus/object-assign).
+* [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+  via [`promise`](https://github.com/then/promise).
+* [`fetch()`](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) via
+  [`whatwg-fetch`](https://github.com/github/fetch).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+If you use any other ES6+ features that need **runtime support** (such as
+`Array.from()` or `Symbol`), make sure you are including the appropriate
+polyfills manually.
+
+### Post-Processing CSS
+
+This project setup minifies your CSS and adds vendor prefixes to it
+automatically through [Autoprefixer](https://github.com/postcss/autoprefixer) so
+you don’t need to worry about it.

@@ -13,7 +13,7 @@ class App extends Component {
     };
   }
 
-  //Make fetching data
+  // Fetching data
   componentDidMount() {
     this.setState({ ...this.state, isFetching: true });
     fetch('../wild-pig-data.json')
@@ -31,7 +31,7 @@ class App extends Component {
     if (this.state.data.length) {
       return <BarChartWrapper data={this.state.data} />;
     }
-    return <p>Something goes wrong with data fetching</p>;
+    return <p>Please wait</p>;
   }
 }
 
