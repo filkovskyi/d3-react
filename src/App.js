@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BarChartWrapper from './components/BarChartWrapper';
+import BarChartWrapper from './components/BarChart/BarChartWrapper';
 import './App.css';
 
 // Main component for rendering whole app and fetching data to pass as props to children components

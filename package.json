@@ -8,6 +8,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-faux-dom": "^4.5.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0"
   },
   "scripts": {
@@ -30,5 +31,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "1.18.2"
   }
 }
