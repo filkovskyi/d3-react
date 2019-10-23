@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Chart from './Chart';
-import Progress from '../Progress';
+import Progress from '../ProgressBar';
 
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
@@ -173,7 +173,6 @@ class BarChartWrapper extends Component {
                   startIcon={<PauseCircleFilledRoundedIcon />}
                 />
               )}
-
               <Button
                 onClick={() => this.handleYearChange(minYear)}
                 variant="outlined"
