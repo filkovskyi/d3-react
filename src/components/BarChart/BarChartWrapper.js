@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import Chart from './Chart';
+import Progress from '../Progress';
+
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+
 import SkipPreviousRoundedIcon from '@material-ui/icons/SkipPreviousRounded';
 import SkipNextRoundedIcon from '@material-ui/icons/SkipNextRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
@@ -23,6 +26,8 @@ class BarChartWrapper extends Component {
 
     const currentYearDataSet = props.data.filter(i => i.year === minYear);
 
+    const completed = +(100 / yearList.length).toFixed(2);
+
     this.state = {
       minYear,
       maxYear,
@@ -30,6 +35,7 @@ class BarChartWrapper extends Component {
       currentYearDataSet,
       currentYear: minYear,
       isPlaying: false,
+      completed,
     };
 
     this.startTimeTravel = this.startTimeTravel.bind(this);
@@ -37,6 +43,12 @@ class BarChartWrapper extends Component {
     this.setIncrementYear = this.setIncrementYear.bind(this);
     this.setDecrementYear = this.setDecrementYear.bind(this);
     this.handleIncrementYear = this.handleIncrementYear.bind(this);
+    this.calculateCompletedProgress = this.calculateCompletedProgress.bind(
+      this,
+    );
+    this.calculateCurrentYearDataSet = this.calculateCurrentYearDataSet.bind(
+      this,
+    );
   }
 
   // utils and helpers
@@ -53,6 +65,19 @@ class BarChartWrapper extends Component {
       ...this.state,
       isPlaying: !this.state.isPlaying,
     });
+  };
+
+  calculateCurrentYearDataSet = currentYear => {
+    return this.props.data.filter(i => i.year === currentYear);
+  };
+
+  calculateCompletedProgress = () => {
+    const { minYear, completed, currentYear } = this.state;
+    if (currentYear === minYear) {
+      return completed;
+    } else {
+      return (currentYear - minYear + 1) * completed;
+    }
   };
 
   startTimeTravel = () => {
@@ -76,7 +101,7 @@ class BarChartWrapper extends Component {
     if (currentYear < maxYear) {
       this.setState({
         currentYear: this.setIncrementYear(currentYear),
-        currentYearDataSet: this.props.data.filter(i => i.year === currentYear),
+        currentYearDataSet: this.calculateCurrentYearDataSet(currentYear),
       });
     }
   };
@@ -88,7 +113,7 @@ class BarChartWrapper extends Component {
     if (minYear < currentYear) {
       this.setState({
         currentYear: this.setDecrementYear(currentYear),
-        currentYearDataSet: this.props.data.filter(i => i.year === currentYear),
+        currentYearDataSet: this.calculateCurrentYearDataSet(currentYear),
       });
     }
   };
@@ -113,19 +138,14 @@ class BarChartWrapper extends Component {
   }
 
   render() {
-    const {
-      minYear,
-      currentYear,
-      yearList,
-      currentYearDataSet,
-      isPlaying,
-    } = this.state;
+    const { minYear, yearList, currentYearDataSet, isPlaying } = this.state;
 
     if (currentYearDataSet.length) {
-      console.log(currentYear);
       return (
         <div>
           <Chart data={currentYearDataSet} />
+
+          <Progress completed={this.calculateCompletedProgress()} />
 
           <Grid item>
             <ButtonGroup
