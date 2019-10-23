@@ -37,18 +37,6 @@ class BarChartWrapper extends Component {
       isPlaying: false,
       completed,
     };
-
-    this.startTimeTravel = this.startTimeTravel.bind(this);
-    this.stopTimeTravel = this.stopTimeTravel.bind(this);
-    this.setIncrementYear = this.setIncrementYear.bind(this);
-    this.setDecrementYear = this.setDecrementYear.bind(this);
-    this.handleIncrementYear = this.handleIncrementYear.bind(this);
-    this.calculateCompletedProgress = this.calculateCompletedProgress.bind(
-      this,
-    );
-    this.calculateCurrentYearDataSet = this.calculateCurrentYearDataSet.bind(
-      this,
-    );
   }
 
   // utils and helpers
@@ -101,7 +89,9 @@ class BarChartWrapper extends Component {
     if (currentYear < maxYear) {
       this.setState({
         currentYear: this.setIncrementYear(currentYear),
-        currentYearDataSet: this.calculateCurrentYearDataSet(currentYear),
+        currentYearDataSet: this.calculateCurrentYearDataSet(
+          this.setIncrementYear(currentYear),
+        ),
       });
     }
   };
@@ -113,7 +103,9 @@ class BarChartWrapper extends Component {
     if (minYear < currentYear) {
       this.setState({
         currentYear: this.setDecrementYear(currentYear),
-        currentYearDataSet: this.calculateCurrentYearDataSet(currentYear),
+        currentYearDataSet: this.calculateCurrentYearDataSet(
+          this.setDecrementYear(currentYear),
+        ),
       });
     }
   };

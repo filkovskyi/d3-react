@@ -22,22 +22,9 @@ class Chart extends Component {
     };
 
     this.barChartRef = React.createRef();
-
-    this.renderD3 = this.renderD3.bind(this);
-    this.updateD3 = this.updateD3.bind(this);
-
-    this.calculateYScale = this.calculateYScale.bind(this);
-    this.calculateXScale = this.calculateXScale.bind(this);
-    this.drawAxis = this.drawAxis.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      ...this.state,
-      pigPopulationArr: this.props.data.map(i => i.pigPopulation),
-      islandsArr: this.props.data.map(i => i.island),
-    });
-
     this.renderD3();
   }
 
@@ -45,21 +32,28 @@ class Chart extends Component {
     //do not compare props.chart as it gets updated in updateD3()
     if (this.props.data !== prevProps.data) {
       this.setState({
-        ...this.state,
-        pigPopulationArr: this.props.data.map(i => i.pigPopulation),
-        islandsArr: this.props.data.map(i => i.island),
+        pigPopulationArr: this.setPigPopulationArr(),
+        islandsArr: this.setIslandsArr(),
       });
-
       this.updateD3();
     }
   }
+
+  // Helpers
+  setPigPopulationArr = () => {
+    return this.props.data.map(i => i.pigPopulation);
+  };
+
+  setIslandsArr = () => {
+    return this.props.data.map(i => i.island);
+  };
 
   calculateYScale() {
     const { height, pigPopulationArr } = this.state;
 
     return d3
       .scaleLinear()
-      .domain([0, Math.max(...pigPopulationArr)])
+      .domain([0, Math.max(...pigPopulationArr) * 1.5])
       .range([height, 0]);
   }
 
@@ -73,6 +67,7 @@ class Chart extends Component {
       .paddingInner(0.4);
   }
 
+  // Draw utils
   drawAxis(svg) {
     const { height, width } = this.state;
 
@@ -101,28 +96,52 @@ class Chart extends Component {
     yAxisDraw.selectAll('text').attr('dx', '-0.6em');
   }
 
-  renderD3() {
-    const { height, width, margin } = this.state;
+  drawLabelsHeaders(svg) {
+    const { margin } = this.state;
+
+    svg
+      .append('text')
+      .attr('x', '-40%')
+      .attr('y', '-10%')
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .text('Pig population');
+
+    svg
+      .append('text')
+      .attr('x', '33%')
+      .attr('y', '83%')
+      .attr('text-anchor', 'middle')
+      .text('Hawaiian islands');
+
+    // Draw header
+    const header = svg
+      .append('g')
+      .attr('class', 'bar-header')
+      .attr('transform', `translate(0,${-margin.top * 0.6})`)
+      .append('text');
+
+    header.append('tspan').text('Hawaiian Pig Visualization');
+
+    header
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', '1.5em')
+      .style('font-size', '0.8em')
+      .style('fill', '#555')
+      .text('Hawaiian Pig Visualization 2000-2005');
+  }
+
+  drawBars(svg) {
+    const { height } = this.state;
+
+    const data = this.props.data;
 
     // Y-AXIS Scales
     const yScale = this.calculateYScale();
 
     // X-AXIS Scales
     const xScale = this.calculateXScale();
-
-    const svg = d3
-      .select(this.barChartRef.current)
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    // Draw axis
-    this.drawAxis(svg);
-
-    // Draw Bars
-    const data = this.props.data;
 
     svg
       .selectAll('rectangle')
@@ -135,45 +154,31 @@ class Chart extends Component {
       .attr('height', s => height - yScale(s.pigPopulation))
       .attr('width', xScale.bandwidth())
       .style('fill', 'dodgerblue');
+  }
 
-    //
-    // // Draw labels
-    // svg
-    //   .append('text')
-    //   .attr('x', '-40%')
-    //   .attr('y', '-10%')
-    //   .attr('transform', 'rotate(-90)')
-    //   .attr('text-anchor', 'middle')
-    //   .text('Pig population');
-    //
-    // svg
-    //   .append('text')
-    //   .attr('x', '33%')
-    //   .attr('y', '83%')
-    //   .attr('text-anchor', 'middle')
-    //   .text('Hawaiian islands');
-    //
-    // // Draw header
-    // const header = svg
-    //   .append('g')
-    //   .attr('class', 'bar-header')
-    //   .attr('transform', `translate(0,${-margin.top * 0.6})`)
-    //   .append('text');
-    //
-    // header.append('tspan').text('Hawaiian Pig Visualization');
-    //
-    // header
-    //   .append('tspan')
-    //   .attr('x', 0)
-    //   .attr('dy', '1.5em')
-    //   .style('font-size', '0.8em')
-    //   .style('fill', '#555')
-    //   .text('Hawaiian Pig Visualization 2000-2005');
-    //
+  renderD3() {
+    const { height, width, margin } = this.state;
+
+    const svg = d3
+      .select(this.barChartRef.current)
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    // Draw axis
+    this.drawAxis(svg);
+
+    // Draw labels and Headers
+    this.drawLabelsHeaders(svg);
+
+    // Draw Bars
+    this.drawBars(svg);
   }
 
   updateD3() {
-    const { height, width, margin, pigPopulationArr, islandsArr } = this.state;
+    const { height } = this.state;
 
     // Y-AXIS Scales
     const yScale = this.calculateYScale();
@@ -188,7 +193,11 @@ class Chart extends Component {
 
     svg
       .selectAll('rect')
+      .data(data)
       .attr('class', 'rectangle')
+      .transition()
+      .duration(500)
+      .ease(d3.easeBackOut)
       .attr('x', s => xScale(s.island))
       .attr('y', s => yScale(s.pigPopulation))
       .attr('height', s => height - yScale(s.pigPopulation))
