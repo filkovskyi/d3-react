@@ -12,6 +12,7 @@ import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
 import RotateLeftRoundedIcon from '@material-ui/icons/RotateLeftRounded';
 
+// /?paused=true&year=2002
 let yearInterval;
 
 class BarChartWrapper extends Component {
@@ -24,6 +25,10 @@ class BarChartWrapper extends Component {
 
     const maxYear = Math.max(...yearList);
 
+    const currentYearWithQuery = this.props.year || minYear;
+
+    const isPlayingWithQuery = this.props.paused;
+
     const currentYearDataSet = props.data.filter(i => i.year === minYear);
 
     const completed = +(100 / yearList.length).toFixed(2);
@@ -33,10 +38,18 @@ class BarChartWrapper extends Component {
       maxYear,
       yearList,
       currentYearDataSet,
-      currentYear: minYear,
+      currentYear: currentYearWithQuery,
       isPlaying: false,
       completed,
     };
+  }
+
+  componentDidMount() {
+    const { isPlaying } = this.state;
+
+    if (isPlaying) {
+      this.startTimeTravel();
+    }
   }
 
   // utils and helpers
@@ -130,7 +143,16 @@ class BarChartWrapper extends Component {
   }
 
   render() {
-    const { minYear, yearList, currentYearDataSet, isPlaying } = this.state;
+    const {
+      minYear,
+      yearList,
+      currentYearDataSet,
+      isPlaying,
+      currentYear,
+    } = this.state;
+
+    console.log(isPlaying);
+    console.log(currentYear);
 
     if (currentYearDataSet.length) {
       return (
