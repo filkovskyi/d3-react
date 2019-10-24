@@ -1,0 +1,10 @@
+.control-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.control-item {
+  margin: 1em 0;
+}

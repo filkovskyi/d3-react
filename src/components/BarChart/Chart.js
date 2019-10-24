@@ -101,7 +101,7 @@ class Chart extends Component {
 
     svg
       .append('text')
-      .attr('x', '-40%')
+      .attr('x', '-23%')
       .attr('y', '-10%')
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
@@ -109,8 +109,8 @@ class Chart extends Component {
 
     svg
       .append('text')
-      .attr('x', '33%')
-      .attr('y', '83%')
+      .attr('x', '27%')
+      .attr('y', '80%')
       .attr('text-anchor', 'middle')
       .text('Hawaiian islands');
 

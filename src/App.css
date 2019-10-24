@@ -31,7 +31,6 @@
   margin: 0 auto;
 }
 
-
 text {
   font-family: 'Avenir', sans-serif;
 }
@@ -65,26 +64,4 @@ text {
 .axes-labels text {
   font-size: 0.6em;
   fill: #444;
-}
-
-
-.wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.col {
-  margin: 0.5em;
-  max-width: 33.33%;
-}
-
-.playBtn {
-  position: absolute;
-  top: 0;
-  right: 50%;
-  display: block;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: darkorange;
-  border-radius: 5px;
 }

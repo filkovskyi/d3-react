@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import Chart from './Chart';
 import Progress from '../ProgressBar';
-
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-
 import SkipPreviousRoundedIcon from '@material-ui/icons/SkipPreviousRounded';
 import SkipNextRoundedIcon from '@material-ui/icons/SkipNextRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
 import RotateLeftRoundedIcon from '@material-ui/icons/RotateLeftRounded';
+import './style.css';
 
 let yearInterval;
 
@@ -157,59 +155,66 @@ class BarChartWrapper extends Component {
         <div>
           <Chart data={currentYearDataSet} />
 
-          <Progress completed={this.calculateCompletedProgress()} />
-
-          <Grid item>
-            <ButtonGroup
-              color="primary"
-              aria-label="outlined primary button group"
-            >
-              <Button
-                onClick={this.handleDecrementYear}
-                variant="outlined"
+          <div className="control-wrapper">
+            <div className="control-item">
+              <Progress completed={this.calculateCompletedProgress()} />
+            </div>
+            <div className="control-item">
+              <ButtonGroup
                 color="primary"
-                startIcon={<SkipPreviousRoundedIcon />}
-              />
-              {!isPlaying ? (
+                aria-label="outlined primary button group"
+              >
                 <Button
-                  onClick={this.handleClick}
+                  onClick={this.handleDecrementYear}
                   variant="outlined"
                   color="primary"
-                  startIcon={<PlayArrowRoundedIcon />}
+                  startIcon={<SkipPreviousRoundedIcon />}
                 />
-              ) : (
+                {!isPlaying ? (
+                  <Button
+                    onClick={this.handleClick}
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<PlayArrowRoundedIcon />}
+                  />
+                ) : (
+                  <Button
+                    onClick={this.handleClick}
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<PauseCircleFilledRoundedIcon />}
+                  />
+                )}
                 <Button
-                  onClick={this.handleClick}
+                  onClick={() => this.handleYearChange(minYear)}
                   variant="outlined"
                   color="primary"
-                  startIcon={<PauseCircleFilledRoundedIcon />}
+                  startIcon={<RotateLeftRoundedIcon />}
                 />
-              )}
-              <Button
-                onClick={() => this.handleYearChange(minYear)}
-                variant="outlined"
-                color="primary"
-                startIcon={<RotateLeftRoundedIcon />}
-              />
-              <Button
-                onClick={this.handleIncrementYear}
-                variant="outlined"
-                color="primary"
-                startIcon={<SkipNextRoundedIcon />}
-              />
-            </ButtonGroup>
-          </Grid>
-
-          {yearList.map((item, i) => (
-            <Button
-              key={i}
-              variant="contained"
-              color="primary"
-              onClick={() => this.handleYearChange(item)}
-            >
-              {item}
-            </Button>
-          ))}
+                <Button
+                  onClick={this.handleIncrementYear}
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<SkipNextRoundedIcon />}
+                />
+              </ButtonGroup>
+            </div>
+            {/*Extra point*/}
+            <div className="control-item">
+              <ButtonGroup color="primary" aria-label=" primary button group">
+                {yearList.map((item, i) => (
+                  <Button
+                    key={i}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => this.handleYearChange(item)}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </ButtonGroup>
+            </div>
+          </div>
         </div>
       );
     }
