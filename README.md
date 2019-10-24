@@ -1,5 +1,7 @@
 # Hawaiian Pig Visualization Assignment
 
+![alt text](./public/pig_barChart.png)
+
 **Objective:** Using [React](https://reactjs.org/), create an animated bar chart
 that shows the data over time.
 
