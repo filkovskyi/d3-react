@@ -28,6 +28,8 @@ class BarChartWrapper extends Component {
 
     const completed = +(100 / yearList.length).toFixed(2);
 
+    this.handleClick = this.handleClick.bind(this);
+
     // check for url query   f.e: /?paused=true&year=2002
     if (this.props.paused) {
       this.state = {
@@ -80,6 +82,15 @@ class BarChartWrapper extends Component {
     } else {
       return (currentYear - minYear + 1) * completed;
     }
+  };
+
+  handleClick = () => {
+    const { isPlaying } = this.state;
+    this.setState(state => ({
+      isPlaying: !isPlaying,
+    }));
+
+    !isPlaying ? this.startTimeTravel() : this.stopTimeTravel();
   };
 
   startTimeTravel = () => {
@@ -139,12 +150,7 @@ class BarChartWrapper extends Component {
   }
 
   render() {
-    const {
-      minYear,
-      yearList,
-      currentYearDataSet,
-      isPlaying,
-    } = this.state;
+    const { minYear, yearList, currentYearDataSet, isPlaying } = this.state;
 
     if (currentYearDataSet.length) {
       return (
@@ -166,14 +172,14 @@ class BarChartWrapper extends Component {
               />
               {!isPlaying ? (
                 <Button
-                  onClick={this.startTimeTravel}
+                  onClick={this.handleClick}
                   variant="outlined"
                   color="primary"
                   startIcon={<PlayArrowRoundedIcon />}
                 />
               ) : (
                 <Button
-                  onClick={this.stopTimeTravel}
+                  onClick={this.handleClick}
                   variant="outlined"
                   color="primary"
                   startIcon={<PauseCircleFilledRoundedIcon />}
