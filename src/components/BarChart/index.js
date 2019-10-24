@@ -12,7 +12,6 @@ import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
 import RotateLeftRoundedIcon from '@material-ui/icons/RotateLeftRounded';
 
-// /?paused=true&year=2002
 let yearInterval;
 
 class BarChartWrapper extends Component {
@@ -25,23 +24,32 @@ class BarChartWrapper extends Component {
 
     const maxYear = Math.max(...yearList);
 
-    const currentYearWithQuery = this.props.year || minYear;
-
-    const isPlayingWithQuery = this.props.paused;
-
     const currentYearDataSet = props.data.filter(i => i.year === minYear);
 
     const completed = +(100 / yearList.length).toFixed(2);
 
-    this.state = {
-      minYear,
-      maxYear,
-      yearList,
-      currentYearDataSet,
-      currentYear: currentYearWithQuery,
-      isPlaying: false,
-      completed,
-    };
+    // check for url query   f.e: /?paused=true&year=2002
+    if (this.props.paused) {
+      this.state = {
+        minYear,
+        maxYear,
+        yearList,
+        currentYearDataSet: props.data.filter(i => i.year === +this.props.year),
+        currentYear: +this.props.year,
+        isPlaying: !this.props.paused,
+        completed,
+      };
+    } else {
+      this.state = {
+        minYear,
+        maxYear,
+        yearList,
+        currentYearDataSet,
+        currentYear: minYear,
+        isPlaying: true,
+        completed,
+      };
+    }
   }
 
   componentDidMount() {
@@ -61,13 +69,6 @@ class BarChartWrapper extends Component {
     return --currentYear;
   };
 
-  setPlayPause = () => {
-    this.setState({
-      ...this.state,
-      isPlaying: !this.state.isPlaying,
-    });
-  };
-
   calculateCurrentYearDataSet = currentYear => {
     return this.props.data.filter(i => i.year === currentYear);
   };
@@ -85,14 +86,10 @@ class BarChartWrapper extends Component {
     yearInterval = setInterval(() => {
       this.setYearDataSet();
     }, 2000);
-
-    this.setPlayPause();
   };
 
   stopTimeTravel = () => {
     clearTimeout(yearInterval);
-
-    this.setPlayPause();
   };
 
   // Increment current year and calculate data-set for incremented year
@@ -126,7 +123,6 @@ class BarChartWrapper extends Component {
   // Setting data-set for year list when user click play button
   setYearDataSet() {
     const { currentYear, maxYear } = this.state;
-
     if (currentYear < maxYear) {
       this.handleIncrementYear();
     } else {
@@ -148,11 +144,7 @@ class BarChartWrapper extends Component {
       yearList,
       currentYearDataSet,
       isPlaying,
-      currentYear,
     } = this.state;
-
-    console.log(isPlaying);
-    console.log(currentYear);
 
     if (currentYearDataSet.length) {
       return (
