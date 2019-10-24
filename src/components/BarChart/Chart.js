@@ -94,6 +94,7 @@ class Chart extends Component {
       .call(yAxis);
 
     yAxisDraw.selectAll('text').attr('dx', '-0.6em');
+    xAxisDraw.selectAll('text').attr('dx', '-0.6em');
   }
 
   drawLabelsHeaders(svg) {
